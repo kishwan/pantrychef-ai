@@ -1,4 +1,5 @@
 from fastapi import FastAPI, status, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from schemas import IngredientListRequest, RecipeSuggestionResponse
 from services import recipe_service
 
@@ -6,6 +7,14 @@ app = FastAPI(
     title="PantryChef AI Backend",
     description="API for smart recipe recommendations based on available ingredients.",
     version="0.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # TODO KISH: FIGURE OUT WHAT SHOULD GO IN CORS FOR PROD
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.post(
