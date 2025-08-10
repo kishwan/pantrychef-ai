@@ -19,3 +19,10 @@ class Recipe(BaseModel):
 # Response model for overall recipe suggestion
 class RecipeSuggestionResponse(BaseModel):
     recipes: List[Recipe]
+
+class QuestionRequest(BaseModel):
+    question: str
+    recipe_context: str
+
+class AnswerResponse(BaseModel):
+    answer: str

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from schemas import IngredientListRequest, RecipeSuggestionResponse
+from schemas import IngredientListRequest, RecipeSuggestionResponse, AnswerResponse, QuestionRequest
 from services import recipe_service
 
 app = FastAPI(
@@ -42,16 +42,31 @@ async def suggest_recipes_endpoint(request: IngredientListRequest):
             detail="An unexpected error occurred while suggesting recipes."
         )
 
-@app.get("/meals", summary="Get a list of sample meal names")
-async def get_meals():
-    meal_names = [
-        "Spaghetti Carbonara",
-        "Chicken Stir-fry",
-        "Lentil Soup",
-        "Vegetable Curry",
-        "Breakfast Burrito"
-    ]
-    return {"meals": meal_names}
+@app.post(
+    "/recipes/ask",
+    response_model=AnswerResponse,
+    summary="Ask question about recipe to AI"
+)
+async def ask_question_endpoint(request: QuestionRequest):
+    if not request.question or not request.recipe_context:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Missing question"
+        )
+    try:
+       answer = await recipe_service.answer_question(request.question, request.recipe_context)
+       return AnswerResponse(answer)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail = str(e)
+        )
+    except Exception as e:
+        print(f"Error answering question: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail = "Uhhhhh"
+        )
 
 @app.get("/", summary="Root endpoint for API status check")
 async def root():

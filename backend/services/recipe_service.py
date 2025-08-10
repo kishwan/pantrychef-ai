@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from clients import themealdb_client
+from clients import themealdb_client, huggingface_client
 
 async def suggest_recipes(ingredients: List[str]) -> List[Dict]:
     received_recipes = await themealdb_client.search_recipes_by_ingredients(ingredients)
@@ -32,4 +32,7 @@ async def suggest_recipes(ingredients: List[str]) -> List[Dict]:
                         processed_recipe["ingredients"].append(ingredient.strip())
                         processed_recipe["measures"].append(measure.strip() if measure else "")
                 full_recipes.append(processed_recipe)
-    return full_recipes   
+    return full_recipes
+
+async def answer_question(question: str, context: str) -> str:
+    return await huggingface_client.answer_question(question, context)
