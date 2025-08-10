@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
+import RecipeCard from './RecipeCard';
 
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [ingredientsInput, setIngredientsInput] = useState('');
-  
+
   const BACKEND_URL = 'http://127.0.0.1:8000';
 
   const fetchRecipes = async (ingredients) => {
@@ -20,14 +21,15 @@ function App() {
       return;
     }
 
-    const ingredientList = ingredients.split(',').map(item => item.trim()).filter(item => item !== '');
+    const ingredientList = ingredients
+      .split(',')
+      .map(item => item.trim())
+      .filter(item => item !== '');
 
     try {
       const response = await fetch(`${BACKEND_URL}/recipes/suggest`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ingredients: ingredientList }),
       });
 
@@ -52,55 +54,69 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header" style={{ backgroundColor: '#29742dff'}}>
-        <h1>PantryChef AI</h1>
-        <p>Discover recipes based on what you have!</p>
+    <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <header className="App-header" style={{
+        padding: '15px',
+        textAlign: 'center',
+        backgroundColor: '#29742dff',
+        borderBottom: '1px solid #ccc',
+        color: 'white'
+      }}>
+        <h1 style={{ margin: '0', fontSize: '2em' }}>PantryChef</h1>
+        <p style={{ margin: '0', fontSize: '1em' }}>Discover recipes based on what you have</p>
       </header>
 
-      <main style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-        <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
+      <main style={{
+        padding: '20px',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        flex: 1
+      }}>
+        <form onSubmit={handleSubmit} style={{
+          marginBottom: '30px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
           <input
             type="text"
             value={ingredientsInput}
             onChange={(e) => setIngredientsInput(e.target.value)}
-            placeholder="Enter ingredients (e.g., chicken, rice)"
-            style={{ width: '70%', padding: '10px', marginRight: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+            placeholder="Enter ingredients (e.g., chicken, rice, onions)"
+            style={{
+              width: 'clamp(200px, 70%, 500px)',
+              padding: '14px',
+              borderRadius: '8px',
+              border: '1px solid #ccc',
+              fontSize: '1em'
+            }}
           />
-          <button type="submit" style={{ padding: '10px 20px', borderRadius: '5px', border: 'none', backgroundColor: '#61dafb', color: 'white', cursor: 'pointer' }}>
+          <button type="submit" style={{
+            padding: '14px 24px',
+            borderRadius: '8px',
+            border: 'none',
+            backgroundColor: '#4CAF50',
+            color: 'white',
+            cursor: 'pointer',
+            fontSize: '1em',
+            fontWeight: 'bold',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+          }}>
             Find Recipes
           </button>
         </form>
 
-        {loading && <p>Loading recipes...</p>}
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        {loading && <p style={{ textAlign: 'center' }}>Loading recipes...</p>}
+        {error && <p style={{ color: 'red', textAlign: 'center' }}>Error: {error}</p>}
 
-        <div className="recipe-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+        <div className="recipe-list">
           {recipes.length > 0 ? (
             recipes.map((recipe) => (
-              <div key={recipe.id} className="recipe-card" style={{ border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-                {recipe.thumbnail && (
-                  <img
-                    src={recipe.thumbnail}
-                    alt={recipe.name}
-                    style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/250x180/cccccc/000000?text=No+Image'; }}
-                  />
-                )}
-                <div style={{ padding: '15px' }}>
-                  <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2em' }}>{recipe.name}</h3>
-                  <p style={{ fontSize: '0.9em', color: '#555' }}>
-                    Category: {recipe.category} | Area: {recipe.area}
-                  </p>
-                  <a href={`https://www.themealdb.com/meal/${recipe.id}`} target="_blank" rel="noopener noreferrer"
-                     style={{ display: 'inline-block', marginTop: '10px', padding: '8px 15px', backgroundColor: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '5px' }}>
-                    View Details
-                  </a>
-                </div>
-              </div>
+              <RecipeCard key={recipe.id} recipe={recipe} backendUrl={BACKEND_URL} />
             ))
           ) : (
-            !loading && !error && <p>Enter ingredients to find recipes!</p>
+            !loading && !error && <p style={{ textAlign: 'center' }}>Enter ingredients to find recipes</p>
           )}
         </div>
       </main>

@@ -55,7 +55,7 @@ async def ask_question_endpoint(request: QuestionRequest):
         )
     try:
        answer = await recipe_service.answer_question(request.question, request.recipe_context)
-       return AnswerResponse(answer)
+       return AnswerResponse(answer=answer)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -65,7 +65,7 @@ async def ask_question_endpoint(request: QuestionRequest):
         print(f"Error answering question: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail = "Uhhhhh"
+            detail = str(e)
         )
 
 @app.get("/", summary="Root endpoint for API status check")
