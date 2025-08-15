@@ -1,4 +1,5 @@
 import RecipeCard from "./RecipeCard";
+import "./RecipeList.css"
 
 export default function RecipeList({ recipes }) {
   if (!recipes.length) {

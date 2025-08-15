@@ -1,5 +1,6 @@
 import { useState } from "react";
 import config from "../config";
+import "./RecipeCard.css"
 
 export default function RecipeCard({ recipe }) {
   const [aiQuestion, setAiQuestion] = useState('');
