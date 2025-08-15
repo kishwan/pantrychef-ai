@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
+import config from "../config";
 
-export default function RecipeCard({ recipe, backendUrl }) {
+export default function RecipeCard({ recipe }) {
   const [aiQuestion, setAiQuestion] = useState('');
   const [aiAnswer, setAiAnswer] = useState('');
   const [loadingAi, setLoadingAi] = useState(false);
@@ -16,7 +17,7 @@ export default function RecipeCard({ recipe, backendUrl }) {
     setAiAnswer('');
 
     try {
-      const response = await fetch(`${backendUrl}/recipes/ask`, {
+      const response = await fetch(`${config.BACKEND_URL}/recipes/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

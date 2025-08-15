@@ -1,14 +1,13 @@
-import { useState } from 'react';
-import './App.css';
-import RecipeCard from './RecipeCard';
+import { useState } from "react";
+import config from "./config";
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar";
+import RecipeList from "./components/RecipeList";
 
-function App() {
+export default function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [ingredientsInput, setIngredientsInput] = useState('');
-
-  const BACKEND_URL = 'http://127.0.0.1:8000';
 
   const fetchRecipes = async (ingredients) => {
     setLoading(true);
@@ -27,7 +26,7 @@ function App() {
       .filter(item => item !== '');
 
     try {
-      const response = await fetch(`${BACKEND_URL}/recipes/suggest`, {
+      const response = await fetch(`${config.BACKEND_URL}/recipes/suggest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ingredients: ingredientList }),
@@ -48,80 +47,15 @@ function App() {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    fetchRecipes(ingredientsInput);
-  };
-
   return (
     <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <header className="App-header" style={{
-        padding: '15px',
-        textAlign: 'center',
-        backgroundColor: '#29742dff',
-        borderBottom: '1px solid #ccc',
-        color: 'white'
-      }}>
-        <h1 style={{ margin: '0', fontSize: '2em' }}>PantryChef</h1>
-        <p style={{ margin: '0', fontSize: '1em' }}>Discover recipes based on what you have</p>
-      </header>
-
-      <main style={{
-        padding: '20px',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        flex: 1
-      }}>
-        <form onSubmit={handleSubmit} style={{
-          marginBottom: '30px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <input
-            type="text"
-            value={ingredientsInput}
-            onChange={(e) => setIngredientsInput(e.target.value)}
-            placeholder="Enter ingredients (e.g., chicken, rice, onions)"
-            style={{
-              width: 'clamp(200px, 70%, 500px)',
-              padding: '14px',
-              borderRadius: '8px',
-              border: '1px solid #ccc',
-              fontSize: '1em'
-            }}
-          />
-          <button type="submit" style={{
-            padding: '14px 24px',
-            borderRadius: '8px',
-            border: 'none',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '1em',
-            fontWeight: 'bold',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-          }}>
-            Find Recipes
-          </button>
-        </form>
-
+      <Header />
+      <main style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto', flex: 1 }}>
+        <SearchBar onSearch={fetchRecipes} />
         {loading && <p style={{ textAlign: 'center' }}>Loading recipes...</p>}
         {error && <p style={{ color: 'red', textAlign: 'center' }}>Error: {error}</p>}
-
-        <div className="recipe-list">
-          {recipes.length > 0 ? (
-            recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} backendUrl={BACKEND_URL} />
-            ))
-          ) : (
-            !loading && !error && <p style={{ textAlign: 'center' }}>Enter ingredients to find recipes</p>
-          )}
-        </div>
+        <RecipeList recipes={recipes} />
       </main>
     </div>
   );
 }
-
-export default App;
