@@ -20,7 +20,11 @@ async def answer_question(question: str, context: str) -> str:
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful cooking assistant. Use the recipe context to answer user questions concisely."
+            "content": (
+                "You are a helpful cooking assistant. "
+                "Use the provided recipe to answer the user's question in **one or two short sentences**. "
+                "Be concise and avoid unnecessary detail."
+            )
         },
         {
             "role": "user",
@@ -32,7 +36,7 @@ async def answer_question(question: str, context: str) -> str:
         completion = client.chat.completions.create(
             model="meta-llama/Llama-3.2-3B-Instruct",
             messages=messages,
-            max_tokens=100,
+            max_tokens=50,
             temperature=0.7
         )
         return completion.choices[0].message["content"].strip()
