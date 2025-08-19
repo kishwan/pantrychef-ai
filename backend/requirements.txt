@@ -3,3 +3,4 @@ uvicorn[standard]
 httpx
 python-dotenv
 huggingface_hub>=0.23.0
+pytest
