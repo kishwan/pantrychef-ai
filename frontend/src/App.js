@@ -48,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="App" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fff8f0' }}>
       <Header />
       <main style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto', flex: 1 }}>
         <SearchBar onSearch={fetchRecipes} />

@@ -33,7 +33,7 @@ export default function SearchBar({ onSearch }) {
         padding: '14px 24px',
         borderRadius: '8px',
         border: 'none',
-        backgroundColor: '#4CAF50',
+        backgroundColor: '#d35400',
         color: 'white',
         cursor: 'pointer',
         fontSize: '1em',

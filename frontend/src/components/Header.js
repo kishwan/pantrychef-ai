@@ -3,7 +3,7 @@ export default function Header() {
     <header style={{
       padding: '15px',
       textAlign: 'center',
-      backgroundColor: '#29742dff',
+      backgroundColor: '#d35400',
       borderBottom: '1px solid #ccc',
       color: 'white'
     }}>
