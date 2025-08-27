@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from schemas import IngredientListRequest, RecipeSuggestionResponse, AnswerResponse, QuestionRequest
-from services import recipe_service
+from .schemas import IngredientListRequest, RecipeSuggestionResponse, AnswerResponse, QuestionRequest
+from .services import recipe_service
 
 app = FastAPI(
     title="PantryChef AI Backend",

@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from clients import themealdb_client, huggingface_client
+from ..clients import themealdb_client, huggingface_client
 
 async def suggest_recipes(ingredients: List[str]) -> List[Dict]:
     received_recipes = await themealdb_client.search_recipes_by_ingredients(ingredients)
