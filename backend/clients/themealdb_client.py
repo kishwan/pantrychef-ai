@@ -1,11 +1,8 @@
 import os
 import httpx
 from typing import List, Dict, Optional
-from dotenv import load_dotenv
 
-load_dotenv()
-
-THEMEALDB_API_KEY = os.getenv("THEMEALDB_API_KEY", "1")
+THEMEALDB_API_KEY = os.getenv("THEMEALDB_API_KEY")
 BASE_URL = f"https://www.themealdb.com/api/json/v1/{THEMEALDB_API_KEY}"
 
 async def search_recipes_by_ingredients(ingredients: List[str]) -> Optional[List[Dict]]:

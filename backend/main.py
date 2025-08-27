@@ -1,7 +1,15 @@
 from fastapi import FastAPI, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .schemas import IngredientListRequest, RecipeSuggestionResponse, AnswerResponse, QuestionRequest
+from dotenv import load_dotenv
+import os
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+dotenv_path = os.path.join(base_dir, '.env')
+load_dotenv(dotenv_path)
+
 from .services import recipe_service
+
 
 app = FastAPI(
     title="PantryChef AI Backend",
