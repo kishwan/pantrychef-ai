@@ -35,6 +35,9 @@ async def suggest_recipes_endpoint(request: IngredientListRequest):
                 status_code=status.HTTP_404_NOT_FOUND
             )
         return RecipeSuggestionResponse(recipes=suggested_recipes)
+    except HTTPException:
+        print(f"HTTPException occurred while suggesting recipes.")
+        raise
     except Exception as e:
         print(f"Error suggesting recipes: {e}")
         raise HTTPException(
